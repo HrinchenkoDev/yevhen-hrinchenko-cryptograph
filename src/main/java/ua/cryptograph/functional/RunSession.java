@@ -8,8 +8,8 @@ public class RunSession {
     private static final String ALPHABET_ENG = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             ".,\"':!? ";
-    private static final String ALPHABET_UKR = "abcdefghijklmnopqrstuvwxyz" +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+    private static final String ALPHABET_UKR = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя" +
+            "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ" +
             ".,\"':!? ";
 
     public void session(String[] args) {
@@ -21,8 +21,15 @@ public class RunSession {
         Command command = Command.valueOf(args[0].toUpperCase());
         String filePath = args[1];
 
-        CaesarCipher cipher = new CaesarCipher(ALPHABET_ENG);
+        LanguageChecker langCode = new LanguageChecker();
         FileManager fileManager = new FileManager();
+        String codeLang = langCode.languageCode(filePath);
+        CaesarCipher cipher;
+        if(codeLang.equals("Uk")) {
+            cipher = new CaesarCipher(ALPHABET_UKR);
+        }else {
+            cipher = new CaesarCipher(ALPHABET_ENG);
+        }
 
         try{
             String content = fileManager.readFile(filePath);
