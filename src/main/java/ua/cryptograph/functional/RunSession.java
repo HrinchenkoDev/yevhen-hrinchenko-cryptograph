@@ -12,12 +12,6 @@ public class RunSession {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             ".,\"':!? ";
 
-//    private final CaesarCipher encoder;
-//
-//    public RunSession(CaesarCipher encoder) {
-//        this.encoder = encoder;
-//    }
-
     public void session(String[] args) {
         if(args.length < 2) {
             throw new IllegalArgumentException("Використання: command filePath key \n " +
