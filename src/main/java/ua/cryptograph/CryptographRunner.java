@@ -1,6 +1,5 @@
 package ua.cryptograph;
 
-import ua.cryptograph.functional.CaesarCipher;
 import ua.cryptograph.functional.RunSession;
 
 public class CryptographRunner {
