@@ -1,19 +1,20 @@
 package ua.cryptograph.functional;
 
-public class Encoder {
+public class CaesarCipher {
 
     private final String alphabet;
 
-    public Encoder(String alphabet) {
+    public CaesarCipher(String alphabet) {
         this.alphabet = alphabet;
     }
 
     public String encode(String text, int key) {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for(char c : text.toCharArray()) {
-            result.append(encodeChar(c, key));
+            char encryptedChar = encodeChar(c, key);
+            result += encryptedChar;
         }
-        return result.toString();
+        return result;
     }
 
     private char encodeChar(char symbol, int key) {
@@ -28,5 +29,13 @@ public class Encoder {
         }
 
         return alphabet.charAt(newIndex);
+    }
+
+    public void bruteForce(String encryptedText) {
+        for(int key = 1; key < alphabet.length(); key++) {
+            String decoded = encode(encryptedText, -key);
+            String preview = decoded.length() > 60 ? decoded.substring(0, 60) : decoded;
+            System.out.println("Key " + key + ": " + preview + "...");
+        }
     }
 }

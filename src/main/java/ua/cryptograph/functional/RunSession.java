@@ -1,13 +1,22 @@
 package ua.cryptograph.functional;
 
 import ua.cryptograph.Command;
+import ua.cryptograph.filemanager.FileManager;
 
 public class RunSession {
-    private final Encoder encoder;
 
-    public RunSession(Encoder encoder) {
-        this.encoder = encoder;
-    }
+    private static final String ALPHABET_ENG = "abcdefghijklmnopqrstuvwxyz" +
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            ".,\"':!? ";
+    private static final String ALPHABET_UKR = "abcdefghijklmnopqrstuvwxyz" +
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            ".,\"':!? ";
+
+//    private final CaesarCipher encoder;
+//
+//    public RunSession(CaesarCipher encoder) {
+//        this.encoder = encoder;
+//    }
 
     public void session(String[] args) {
         if(args.length < 2) {
@@ -16,9 +25,31 @@ public class RunSession {
         }
 
         Command command = Command.valueOf(args[0].toUpperCase());
+        String filePath = args[1];
 
-        switch(command) {
-            case ENCRYPT:
+        CaesarCipher cipher = new CaesarCipher(ALPHABET_ENG);
+        FileManager fileManager = new FileManager();
+
+        try{
+            String content = fileManager.readFile(filePath);
+
+            switch(command) {
+                case ENCRYPT:
+                    int keyEnc = Integer.parseInt(args[2]);
+                    fileManager.writeFile(filePath, cipher.encode(content, keyEnc), "[ENCRYPTED]");
+                    break;
+                case DECRYPT:
+                    int keyDec = Integer.parseInt(args[2]);
+                    fileManager.writeFile(filePath, cipher.encode(content, -keyDec), "[DECRYPTED]");
+                    break;
+                case BRUTE_FORCE:
+                    cipher.bruteForce(content);
+                    break;
+                default:
+                    System.out.println("Unknown command!");
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
