@@ -1,16 +1,15 @@
 package ua.cryptograph.functional;
 
 public class LanguageChecker {
-    public String languageCode(String file) {
-        String content = file;
-        if(isUkrainian(content)) {
-            return "Uk";
-        }else {
-            return "En";
+    public String detectAlphabet(String text, String engAlphabet, String ukAlphabet) {
+        for (char c : text.toCharArray()) {
+            if (isLetter(c, ukAlphabet)) return ukAlphabet;
+            if (isLetter(c, engAlphabet)) return engAlphabet;
         }
+        return engAlphabet;
     }
 
-    public static boolean isUkrainian(String text) {
-        return text.matches(".*[іїєґІЇЄҐ].*");
+    private boolean isLetter(char c, String alphabet) {
+        return alphabet.indexOf(c) != -1 && ".,\"':!? ".indexOf(c) == -1;
     }
 }
