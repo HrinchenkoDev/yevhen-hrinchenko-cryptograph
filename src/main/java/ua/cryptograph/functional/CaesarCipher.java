@@ -11,8 +11,7 @@ public class CaesarCipher {
     public String encode(String text, int key) {
         String result = "";
         for(char c : text.toCharArray()) {
-            char encryptedChar = encodeChar(c, key);
-            result += encryptedChar;
+            result = result + encodeChar(c, key);
         }
         return result;
     }
@@ -23,19 +22,17 @@ public class CaesarCipher {
             return symbol;
         }
 
-        int newIndex = (index + key) % alphabet.length();
-        if(newIndex < 0) {
-            newIndex += alphabet.length();
-        }
+        int alphabetSize = alphabet.length();
+        int newIndex = (index + (key % alphabetSize) + alphabetSize) % alphabetSize;
 
         return alphabet.charAt(newIndex);
     }
 
     public void bruteForce(String encryptedText) {
-        for(int key = 1; key < alphabet.length(); key++) {
+        for (int key = 1; key < alphabet.length(); key++) {
             String decoded = encode(encryptedText, -key);
             String preview = decoded.length() > 60 ? decoded.substring(0, 60) : decoded;
-            System.out.println("Key " + key + ": " + preview + "...");
+            System.out.println("Ключ " + key + ": [" + preview + "...]");
         }
     }
 }

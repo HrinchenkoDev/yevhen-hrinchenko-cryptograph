@@ -20,20 +20,12 @@ public class RunSession {
 
         Command command = Command.valueOf(args[0].toUpperCase());
         String filePath = args[1];
-
-        LanguageChecker langCode = new LanguageChecker();
         FileManager fileManager = new FileManager();
-        String codeLang = langCode.languageCode(filePath);
-        CaesarCipher cipher;
-        if(codeLang.equals("Uk")) {
-            cipher = new CaesarCipher(ALPHABET_UKR);
-        }else {
-            cipher = new CaesarCipher(ALPHABET_ENG);
-        }
+        String content = fileManager.readFile(filePath);
+        String alphabet = detectAlphabet(content);
+        CaesarCipher cipher = new CaesarCipher(alphabet);
 
         try{
-            String content = fileManager.readFile(filePath);
-
             switch(command) {
                 case ENCRYPT:
                     int keyEnc = Integer.parseInt(args[2]);
@@ -52,5 +44,18 @@ public class RunSession {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    public String detectAlphabet(String text) {
+        for (char c : text.toCharArray()) {
+            if (isLetter(c, ALPHABET_UKR)) return ALPHABET_UKR;
+            if (isLetter(c, ALPHABET_ENG)) return ALPHABET_ENG;
+        }
+        return ALPHABET_ENG;
+    }
+
+    private boolean isLetter(char c, String alphabet) {
+        // Перевіряємо, чи це літера (не розділовий знак і не пробіл)
+        return alphabet.indexOf(c) != -1 && ".,\"':!? ".indexOf(c) == -1;
     }
 }
