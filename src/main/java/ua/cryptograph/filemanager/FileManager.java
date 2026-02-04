@@ -1,6 +1,6 @@
 package ua.cryptograph.filemanager;
 
-import ua.cryptograph.exceptionsapp.FileProcessingException;
+import ua.cryptograph.exception.FileProcessingException;
 
 import java.io.IOException;
 import java.nio.file.Files;

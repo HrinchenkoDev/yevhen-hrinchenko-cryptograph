@@ -1,4 +1,4 @@
-package ua.cryptograph.exceptionsapp;
+package ua.cryptograph.exception;
 
 public class FileProcessingException extends RuntimeException {
     public FileProcessingException(String message, Throwable cause) {

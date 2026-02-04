@@ -2,6 +2,7 @@ package ua.cryptograph.functional;
 
 public class CaesarCipher {
 
+    public static final int SYMBOLS_IN_ALPHABET = 60;
     private final String alphabet;
 
     public CaesarCipher(String alphabet) {
@@ -9,11 +10,11 @@ public class CaesarCipher {
     }
 
     public String encode(String text, int key) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for(char c : text.toCharArray()) {
-            result = result + encodeChar(c, key);
+            result.append(encodeChar(c, key));
         }
-        return result;
+        return result.toString();
     }
 
     private char encodeChar(char symbol, int key) {
@@ -31,7 +32,7 @@ public class CaesarCipher {
     public void bruteForce(String encryptedText) {
         for (int key = 1; key < alphabet.length(); key++) {
             String decoded = encode(encryptedText, -key);
-            String preview = decoded.length() > 60 ? decoded.substring(0, 60) : decoded;
+            String preview = decoded.length() > SYMBOLS_IN_ALPHABET ? decoded.substring(0, SYMBOLS_IN_ALPHABET) : decoded;
             System.out.println("Ключ " + key + ": [" + preview + "...]");
         }
     }
