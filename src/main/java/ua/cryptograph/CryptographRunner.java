@@ -3,7 +3,7 @@ package ua.cryptograph;
 import ua.cryptograph.filemanager.FileManager;
 import ua.cryptograph.functional.CaesarCipher;
 import ua.cryptograph.functional.LanguageChecker;
-import ua.cryptograph.functional.CommanProcessor;
+import ua.cryptograph.functional.CommandProcessor;
 
 public class CryptographRunner {
 
@@ -15,7 +15,7 @@ public class CryptographRunner {
             ".,\"':!? ";
 
     public static void main(String[] args) {
-        CommanProcessor runCryptograph = new CommanProcessor();
+        CommandProcessor runCryptograph = new CommandProcessor();
         FileManager fileManager = new FileManager();
         LanguageChecker langChecker = new LanguageChecker();
         String filePath = args[1];

@@ -3,7 +3,8 @@ package ua.cryptograph.functional;
 import ua.cryptograph.Command;
 import ua.cryptograph.filemanager.FileManager;
 
-public class CommanProcessor {
+
+public class CommandProcessor {
 
     public void session(String[] args, CaesarCipher cipher, FileManager fileManager) {
         if(args.length < 2) {
