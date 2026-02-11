@@ -38,7 +38,6 @@ public class CommandProcessor {
             String alphabet = langChecker.detectAlphabet(content);
             CaesarCipher cipher = new CaesarCipher(alphabet);
 
-
             switch (Command.valueOf(argCommand)) {
                 case Command.ENCRYPT:
                     System.out.println("--ENCRYPTED--");
