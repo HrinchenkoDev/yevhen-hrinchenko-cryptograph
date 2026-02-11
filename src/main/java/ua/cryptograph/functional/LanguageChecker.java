@@ -1,40 +1,40 @@
 package ua.cryptograph.functional;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageChecker {
 
-    private final Map<String, String> alphabets = new LinkedHashMap<>();
+    private static final int ANALYSIS_LIMIT = 500;
+    private final Map<String, String> alphabets;
 
-    public LanguageChecker() {
-        alphabets.put("English", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,\"':!? ");
-        alphabets.put("Ukrainian", "абвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ.,\"':!? ");
+    public LanguageChecker(Map<String, String> alphabet) {
+        this.alphabets = new HashMap<>(alphabet);
     }
 
     public String detectAlphabet(String text) {
-        String bestAlphabet = alphabets.get("English");
+        String defaultAlphabet = alphabets.get("English");
         int maxCount = 0;
 
-        for(Map.Entry<String, String> entry : alphabets.entrySet()) {
+        for (Map.Entry<String, String> entry : alphabets.entrySet()) {
             String currentAlphabet = entry.getValue();
             int count = 0;
 
-            int limit = Math.min(text.length(), 500);
-            for(int i = 0; i < limit; i++) {
+            int limit = Math.min(text.length(), ANALYSIS_LIMIT);
+            for (int i = 0; i < limit; i++) {
                 char c = text.charAt(i);
 
-                if(currentAlphabet.indexOf(c) != -1 && !isShared(c)) {
+                if (currentAlphabet.indexOf(c) != -1 && !isShared(c)) {
                     count++;
                 }
             }
 
-            if(count > maxCount) {
+            if (count > maxCount) {
                 maxCount = count;
-                bestAlphabet = currentAlphabet;
+                defaultAlphabet = currentAlphabet;
             }
         }
-        return bestAlphabet;
+        return defaultAlphabet;
     }
 
     private boolean isShared(char c) {

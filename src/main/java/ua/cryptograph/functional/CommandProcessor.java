@@ -1,42 +1,55 @@
 package ua.cryptograph.functional;
 
-import ua.cryptograph.Command;
+import ua.cryptograph.domain.Command;
 import ua.cryptograph.filemanager.FileManager;
-import java.util.Scanner;
 
 public class CommandProcessor {
-    private final FileManager fileManager = new FileManager();
-    private final LanguageChecker langChecker = new LanguageChecker();
+    private final FileManager fileManager;
+    private final LanguageChecker langChecker;
 
-    public void session(String[] args) {
-        try{
-            if(args.length >= 2) {
-                Command command = Command.valueOf(args[0].toUpperCase());
+    public CommandProcessor(FileManager fileManager, LanguageChecker langChecker) {
+        this.fileManager = fileManager;
+        this.langChecker = langChecker;
+    }
+
+    public void startProcess(String[] args) {
+        try {
+            if (args.length >= 2) {
+                String argCommand = args[0].toUpperCase();
                 String filePath = args[1];
                 int key = (args.length > 2) ? Integer.parseInt(args[2]) : 0;
-                execute(String.valueOf(command), filePath, key);
-            }else {
-                runInteractive();
+                execute(argCommand, filePath, key);
+            } else {
+                String[] arguments = new CLIService().runCLI();
+                if (arguments.length < 3) {
+                    execute(arguments[0], arguments[1], 0);
+                } else {
+                    execute(arguments[0], arguments[1], Integer.parseInt(arguments[2]));
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 
-    public void execute(String command, String filePath, int key) {
-        try{
+    public void execute(String argCommand, String filePath, int key) {
+        try {
             String content = fileManager.readFile(filePath);
             String alphabet = langChecker.detectAlphabet(content);
             CaesarCipher cipher = new CaesarCipher(alphabet);
 
-            switch(command) {
-                case "ENCRYPT":
+
+            switch (Command.valueOf(argCommand)) {
+                case Command.ENCRYPT:
+                    System.out.println("--ENCRYPTED--");
                     fileManager.writeFile(filePath, cipher.encode(content, key), "[ENCRYPTED]");
                     break;
-                case "DECRYPT":
+                case Command.DECRYPT:
+                    System.out.println("--DECRYPTED--");
                     fileManager.writeFile(filePath, cipher.encode(content, -key), "[DECRYPTED]");
                     break;
-                case "BRUTE_FORCE":
+                case Command.BRUTE_FORCE:
+                    System.out.println("--BRUTE_FORCE--");
                     cipher.bruteForce(content);
                     break;
                 default:
@@ -45,24 +58,5 @@ public class CommandProcessor {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
-
-    private void runInteractive() {
-        Scanner scanConsole = new Scanner(System.in);
-        System.out.println("--- CAESAR CRYPTOGRAPH ---");
-
-        System.out.print("Select an action - (ENCRYPT/DECRYPT/BRUTE_FORCE): ");
-        String command = scanConsole.nextLine().toUpperCase();
-
-        System.out.print("Enter file path: ");
-        String filePath = scanConsole.nextLine();
-
-        int key = 0;
-        if(!"BRUTE_FORCE".equals(command)) {
-            System.out.print("Enter the key: ");
-            key = Integer.parseInt(scanConsole.nextLine());
-        }
-
-        execute(command, filePath, key);
     }
 }
